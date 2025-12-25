@@ -36,7 +36,10 @@ export function CalendarPlansTable({ educationalPlanId }: Props) {
             plan={plan}
             onSave={(data) => updatePlan(plan.id, data)}
           />
-          <button className="calendar-plan__actions" onClick={() => deletePlan(plan.id)}>Удалить</button>
+
+          <div className="calendar-plan__actions">
+            <button className="calendar-plan__actions" onClick={() => deletePlan(plan.id)}>Удалить</button>
+          </div>
         </div>
       ))}
     </div>

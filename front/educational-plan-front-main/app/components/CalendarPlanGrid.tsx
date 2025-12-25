@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { exportCalendarPlan } from '../hooks/exportCalendarPlan';
+import { importCalendarPlan } from '../hooks/importCalendarPlan';
+
 import '../../styles/CalendarPlan.css';
 
 type Course = {
@@ -208,7 +210,6 @@ function calculateCourseStats(weeks: string[]) {
 }
 
 
-
   return (
     <div className="calendar-plan">
       <h3>Календарный учебный график</h3>
@@ -358,16 +359,26 @@ function calculateCourseStats(weeks: string[]) {
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
-          <button onClick={handleSave}>
-            Сохранить календарный план
-          </button>
-
+      <div className="calendar-plan__actions">
           <button onClick={() => exportCalendarPlan({ data })}>
             Экспорт в Excel
           </button>
-        </div>
+      </div>
 
+      <div className="calendar-plan__actions">
+          <input
+              type="file"
+              accept=".xlsx"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                importCalendarPlan(file, (importedData) => {
+                  setData(importedData);
+                });
+              }}
+            />
+      </div>
     </div>
   );
 }
