@@ -15,6 +15,9 @@ import { SemesterTable } from "@/app/components/SemesterTable";
 import { AttributesPanel } from "@/app/components/AttributesPanel";
 import { CoreModal } from "@/app/components/CoreModal";
 import { SaveMapModal } from "@/app/components/SaveMapModal";
+import { CalendarPlansTable } from "@/app/components/CalendarPlansTable";
+
+
 
 import { ErrorWindow } from "@/app/components/ErrorWindow";
 
@@ -35,6 +38,8 @@ import {
 
 const Home = () => {
   const [currentDirection, setCurrentDirection] = useState<DirectionData | null>(null);
+  console.log("currentDirection:", currentDirection);
+
   const [educationalLevels, setEducationalLevels] = useState<EducationalLevel[]>([]);
   const [educationalForms, setEducationalForms] = useState<EducationalForm[]>([]);
 
@@ -234,6 +239,22 @@ const Home = () => {
 
   return (
     <div className={container["container"]}>
+
+    <button
+      onClick={() =>
+        setCurrentDirection({
+          id: 1,
+          name: "TEST",
+          level: "TEST",
+          form: "TEST",
+          semesters: 8,
+        } as any)
+      }
+    >
+      SET DIRECTION
+    </button>
+
+
       <Head>
         <title>Учебный план</title>
       </Head>
@@ -281,6 +302,7 @@ const Home = () => {
         )}
 
         <div className={table["content-wrapper"]}>
+
         <main className={table.main}>
             <SemesterTable
               columns={columns}
@@ -301,6 +323,23 @@ const Home = () => {
               handleDisciplineDelete={handleDisciplineDelete}
               handleRowDelete={handleRowDelete}
             />
+
+            {currentDirection && <div>TEST: направление выбрано</div>}
+
+            {currentDirection && (
+                <div
+                  style={{
+                    marginTop: 24,
+                    width: "max-content",
+                    padding: 24,
+                    background: '#ffffff',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
+                    overflowX: 'auto',
+                  }}
+                >
+                  <CalendarPlansTable educationalPlanId={currentDirection.id} />
+                </div>
+              )}
           </main>
         </div>
 

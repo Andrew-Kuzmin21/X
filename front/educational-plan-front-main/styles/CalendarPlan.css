@@ -1,0 +1,106 @@
+.calendar-plan {
+  margin-top: 24px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+}
+
+.calendar-plan h3 {
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ===== ШАПКА ===== */
+
+.calendar-plan__header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+  max-width: 700px;
+  margin-bottom: 20px;
+}
+
+.calendar-plan__header input,
+.calendar-plan__header select {
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1px solid #bfbfbf;
+  border-radius: 4px;
+}
+
+.calendar-plan__header label {
+  grid-column: span 2;
+  font-size: 14px;
+}
+
+/* ===== ТАБЛИЦА ===== */
+
+.calendar-plan__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.calendar-plan__table th,
+.calendar-plan__table td {
+  border: 1px solid #444;
+  padding: 2px;
+  text-align: center;
+}
+
+.calendar-plan__table th {
+  background: #f2f2f2;
+  font-weight: 600;
+}
+
+.calendar-plan__week-input {
+  width: 22px;
+  border: none;
+  text-align: center;
+  font-size: 12px;
+  color: #000;
+  background:  #fff;
+}
+
+.calendar-plan__week-input:focus {
+  outline: 1px solid #666;
+}
+
+/* ===== ИТОГОВЫЕ СТОЛБЦЫ ===== */
+
+.calendar-plan__summary {
+  background: #fafafa;
+  font-weight: 600;
+}
+
+/* ===== ЛЕГЕНДА ===== */
+
+.calendar-plan__legend {
+  margin-top: 14px;
+  font-size: 13px;
+}
+
+.calendar-plan__legend div {
+  margin-bottom: 2px;
+}
+
+/* ===== КНОПКА ===== */
+
+.calendar-plan__actions {
+  margin-top: 16px;
+}
+
+.calendar-plan__actions button {
+  padding: 8px 14px;
+  font-size: 14px;
+  background: #2f6fed;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.calendar-plan__actions button:hover {
+  background: #2458c7;
+}

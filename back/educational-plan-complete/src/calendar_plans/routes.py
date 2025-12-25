@@ -52,3 +52,12 @@ def upload_file(id:int, file: UploadFile = File(...), db: Session = Depends(get_
     with open(path, "wb") as f:
         f.write(file.file.read())
     return repo.update(db, obj, {"file_path": path})
+
+
+@router.get("/by-educational-plan/{educational_plan_id}",
+            response_model=list[schemas.CalendarPlanOut])
+def list_by_educational_plan(
+    educational_plan_id: int,
+    db: Session = Depends(get_db),
+):
+    return repo.list_by_educational_plan(db, educational_plan_id)

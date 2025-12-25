@@ -27,3 +27,10 @@ def delete(db: Session, db_obj):
     db.delete(db_obj)
     db.commit()
     return True
+
+def list_by_educational_plan(db: Session, educational_plan_id: int):
+    return (
+        db.query(CalendarPlan)
+        .filter(CalendarPlan.educational_plan_id == educational_plan_id)
+        .all()
+    )
