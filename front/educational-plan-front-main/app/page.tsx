@@ -324,8 +324,7 @@ const Home = () => {
               handleRowDelete={handleRowDelete}
             />
 
-            {currentDirection && <div>TEST: направление выбрано</div>}
-
+            //Календарный учебный график
             {currentDirection && (
                 <div
                   style={{

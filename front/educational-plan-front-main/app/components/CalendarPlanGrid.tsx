@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { exportCalendarPlan } from '../hooks/exportCalendarPlan';
 import '../../styles/CalendarPlan.css';
 
 type Course = {
@@ -84,12 +85,129 @@ export function CalendarPlanGrid({ plan, onSave }: Props) {
     setData({ ...data, courses: next });
   };
 
-  const isValid =
-    data.title &&
+  const handleSave = () => {
+    if (
+      !data.title ||
+      !data.academic_year ||
+      !data.group ||
+      !data.profile ||
+      !data.reg_number
+    ) {
+      alert('Заполните все обязательные поля');
+      return;
+    }
+
+    onSave(data);
+  };
+
+  const isValid = data.title &&
     data.academic_year &&
     data.group &&
     data.profile &&
     data.reg_number;
+
+  const totals = (() => {
+  let tAutumn = 0;
+  let tSpring = 0;
+  let tTotal = 0;
+  let exams = 0;
+  let study = 0;
+  let other = 0;
+  let pre = 0;
+  let nir = 0;
+  let gia = 0;
+  let holidays = 0;
+  let total = 0;
+
+  data.courses.forEach((course) => {
+    const weeks = course.weeks ?? Array(WEEK_COUNT).fill('');
+    const autumn = weeks.slice(0, 23);
+    const spring = weeks.slice(23);
+
+    const isTheory = (w: string) => w === '' || w === 'С';
+    const count = (v: string) => weeks.filter((w) => w === v).length;
+
+    const a = autumn.filter(isTheory).length;
+    const s = spring.filter(isTheory).length;
+    const th = a + s;
+
+    const ex = count('С');
+    const st = count('У');
+    const ot = count('П');
+    const pr = count('Д');
+    const n = count('Н');
+    const g = count('Г');
+    const h = count('=');
+
+    const sum =
+      th + st + ot + pr + n + g + h;
+
+    tAutumn += a;
+    tSpring += s;
+    tTotal += th;
+    exams += ex;
+    study += st;
+    other += ot;
+    pre += pr;
+    nir += n;
+    gia += g;
+    holidays += h;
+    total += sum;
+  });
+
+  return {
+    tAutumn,
+    tSpring,
+    tTotal,
+    exams,
+    study,
+    other,
+    pre,
+    nir,
+    gia,
+    holidays,
+    total,
+  };
+})();
+
+function calculateCourseStats(weeks: string[]) {
+  const autumn = weeks.slice(0, 23);
+  const spring = weeks.slice(23);
+
+  const isTheory = (w: string) => w === '' || w === 'С';
+  const count = (v: string) => weeks.filter((w) => w === v).length;
+
+  const theoryAutumn = autumn.filter(isTheory).length;
+  const theorySpring = spring.filter(isTheory).length;
+  const theoryTotal = theoryAutumn + theorySpring;
+
+  const exams = count('С');
+  const study = count('У');
+  const other = count('П');
+  const pre = count('Д');
+  const nir = count('Н');
+  const gia = count('Г');
+  const holidays = count('=');
+
+  const total =
+    theoryTotal + study + other + pre + nir + gia + holidays;
+
+  return {
+    theoryAutumn,
+    theorySpring,
+    theoryTotal,
+    exams,
+    study,
+    other,
+    pre,
+    nir,
+    gia,
+    holidays,
+    total,
+  };
+}
+
+
 
   return (
     <div className="calendar-plan">
@@ -165,8 +283,8 @@ export function CalendarPlanGrid({ plan, onSave }: Props) {
             const autumn = c.weeks.slice(0, WEEK_AUTUMN);
             const spring = c.weeks.slice(WEEK_AUTUMN);
 
-            const theoryO = count(autumn, ['']);
-            const theoryV = count(spring, ['']);
+            const theoryO = count(autumn, ['', 'С']);
+            const theoryV = count(spring, ['', 'С']);
 
             return (
               <tr key={c.course}>
@@ -197,6 +315,28 @@ export function CalendarPlanGrid({ plan, onSave }: Props) {
               </tr>
             );
           })}
+
+           <tr style={{ fontWeight: 'bold', background: '#f3f3f3' }}>
+              <td>Итого</td>
+
+              {/* пропускаем 52 недели */}
+              {Array.from({ length: WEEK_COUNT }).map((_, i) => (
+                <td key={i}></td>
+              ))}
+
+              <td>{totals.tAutumn}</td>
+              <td>{totals.tSpring}</td>
+              <td>{totals.tTotal}</td>
+              <td>{totals.exams}</td>
+              <td>{totals.study}</td>
+              <td>{totals.other}</td>
+              <td>{totals.pre}</td>
+              <td>{totals.nir}</td>
+              <td>{totals.gia}</td>
+              <td>{totals.holidays}</td>
+              <td>{totals.total}</td>
+            </tr>
+
         </tbody>
       </table>
 
@@ -217,6 +357,17 @@ export function CalendarPlanGrid({ plan, onSave }: Props) {
           Сохранить календарный план
         </button>
       </div>
+
+      <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
+          <button onClick={handleSave}>
+            Сохранить календарный план
+          </button>
+
+          <button onClick={() => exportCalendarPlan({ data })}>
+            Экспорт в Excel
+          </button>
+        </div>
+
     </div>
   );
 }
