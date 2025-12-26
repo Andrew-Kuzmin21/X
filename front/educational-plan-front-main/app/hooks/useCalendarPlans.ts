@@ -22,6 +22,7 @@ export function useCalendarPlans(educationalPlanId: number) {
     setLoading(false);
   };
 
+
   const createPlan = async (data: any) => {
     await fetch(`${API_URL}/calendar-plans`, {
       method: 'POST',
